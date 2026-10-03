@@ -1,0 +1,3 @@
+2026-10-03T10:10:00Z INFO synthetic Windows security event: successful logon user=training
+2026-10-03T10:11:15Z WARN synthetic repeated authentication event src=192.0.2.25
+2026-10-03T10:12:20Z ERROR synthetic service alert host=lab.example.org
