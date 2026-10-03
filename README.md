@@ -3,14 +3,14 @@
 > **Personal cybersecurity project by Muqtada Al-Sadr Jarallah Khalif (Al-Hantooshi)**  
 > Developer • Team Leader of CyberIQ
 
-![Version](https://img.shields.io/badge/version-1.0.0-B00020) ![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white) ![Scope](https://img.shields.io/badge/DFIR-local--first-800020)
+![Version](https://img.shields.io/badge/version-1.1.0-B00020) ![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white) ![Scope](https://img.shields.io/badge/DFIR-local--first-800020)
 
 A Python **Digital Forensics & Incident Response workbench** for authorized investigations, CTF/DFIR practice, education, and defensive security engineering.
 
 > [!IMPORTANT]
 > CyberIQ DFIR Lab works on supplied local evidence. It intentionally excludes network scanning, exploitation, credential attacks, persistence, and malware behavior.
 
-## What v1.0 does
+## What v1.1 does
 
 **Evidence → SHA-256 manifest → offline analysis → normalized case timeline → analyst notes/status → JSON/Markdown/HTML report → local dashboard**
 
@@ -18,7 +18,10 @@ A Python **Digital Forensics & Incident Response workbench** for authorized inve
 - Evidence copy + SHA-256 integrity record + size/provenance metadata
 - Offline log-level summaries and IPv4/domain/SHA-256 pattern inventory
 - ISO timestamp timeline extraction from supplied logs
-- Case event timeline, analyst notes and lifecycle status
+- Case event timeline, analyst notes and controlled lifecycle status
+- Case schema validation and evidence integrity re-verification
+- Chain-of-custody activity records
+- Structured analyst findings with severity and evidence references
 - JSON, Markdown and standalone HTML exports
 - Read-only local HTML dashboard
 - Small safe offline plugin registry
@@ -45,6 +48,10 @@ cyberiq-dfir analyze-log examples/sample.log --output analysis.json
 cyberiq-dfir timeline examples/sample.log --output timeline.json
 cyberiq-dfir case-note cases/incident-001 "Initial evidence review complete"
 cyberiq-dfir case-status cases/incident-001 review
+cyberiq-dfir case-verify cases/incident-001
+cyberiq-dfir case-validate cases/incident-001
+cyberiq-dfir custody-add cases/incident-001 review --actor analyst --detail "Integrity checked"
+cyberiq-dfir finding-add cases/incident-001 "Synthetic training observation" --severity low --evidence sample.log
 cyberiq-dfir case-export cases/incident-001 report.html --format html
 cyberiq-dfir dashboard cases/incident-001 --output dashboard.html
 ```
@@ -95,6 +102,10 @@ The repository defines CI across Python 3.10–3.13. The README does not claim a
 
 - `docs/ARCHITECTURE.md` — evidence pipeline and design boundaries
 - `docs/ANALYST-GUIDE.md` — practical investigation workflow
+- `docs/CASE-WORKFLOW.md` — case lifecycle and review procedure
+- `docs/DATA-MODEL.md` — case, evidence, finding and custody records
+- `docs/THREAT-MODEL.md` — trust boundaries and untrusted evidence model
+- `docs/ROADMAP.md` — planned hardening
 - `SECURITY.md` — project security policy
 - `CONTRIBUTING.md` — contribution rules
 - `CHANGELOG.md` — version history
