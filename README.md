@@ -3,7 +3,7 @@
 > **Personal cybersecurity project by Muqtada Al-Sadr Jarallah Khalif (Al-Hantooshi)**  
 > Developer • Team Leader of CyberIQ
 
-![Version](https://img.shields.io/badge/version-1.2.0-B00020) ![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white) ![Scope](https://img.shields.io/badge/DFIR-local--first-800020)
+![Version](https://img.shields.io/badge/version-1.2.1-B00020) ![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white) ![Scope](https://img.shields.io/badge/DFIR-local--first-800020)
 
 A Python **Digital Forensics & Incident Response workbench** for authorized investigations, CTF/DFIR practice, education, and defensive security engineering.
 
