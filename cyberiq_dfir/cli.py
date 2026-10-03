@@ -6,6 +6,7 @@ from .timeline import parse_lines
 from .reporting import export_case
 from .dashboard import build as build_dashboard
 from .plugins import names as plugin_names, run as plugin_run
+from .integrity import verify_case
 
 def emit(data): print(json.dumps(data,indent=2))
 def main():
@@ -20,6 +21,7 @@ def main():
  q=s.add_parser("case-status"); q.add_argument("case"); q.add_argument("status",nargs="?")
  q=s.add_parser("case-export"); q.add_argument("case"); q.add_argument("output"); q.add_argument("--format",choices=["json","md","html"],default="html")
  q=s.add_parser("dashboard"); q.add_argument("case"); q.add_argument("--output",default="dfir-dashboard.html")
+ q=s.add_parser("case-verify"); q.add_argument("case")
  q=s.add_parser("plugin-list")
  q=s.add_parser("plugin-run"); q.add_argument("name"); q.add_argument("file")
  a=p.parse_args()
@@ -32,6 +34,7 @@ def main():
  elif a.cmd=="case-status": data=set_status(a.case,a.status) if a.status else load(a.case)
  elif a.cmd=="case-export": export_case(load(a.case),a.output,a.format); data={"output":a.output,"format":a.format}
  elif a.cmd=="dashboard": build_dashboard(a.case,a.output); data={"output":a.output}
+ elif a.cmd=="case-verify": data=verify_case(a.case)
  elif a.cmd=="plugin-list": data={"plugins":plugin_names()}
  else: data=plugin_run(a.name,Path(a.file).read_text(encoding="utf-8",errors="replace"))
  if getattr(a,"output",None) and a.cmd in ("evidence","analyze-log","timeline"): write_json(data,a.output)
