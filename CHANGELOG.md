@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.1.0
+- Case schema validation
+- Controlled case lifecycle states
+- Chain-of-custody records
+- Structured analyst findings with severity
+- Evidence integrity verification
+- Expanded safe synthetic dataset
+- Case workflow and data-model documentation
+- Regression tests for integrity, validation, custody, and findings
+
 ## 1.0.0
 - Case lifecycle and evidence manifest
 - SHA-256 evidence integrity records
