@@ -8,7 +8,7 @@ def now(): return datetime.now(timezone.utc).isoformat()
 def new_case(name, root="cases"):
  p=Path(root)/name
  for d in ("evidence","reports","notes"): (p/d).mkdir(parents=True,exist_ok=True)
- manifest={"schema":"cyberiq.case.v1","case":name,"status":"open","created_utc":now(),"timeline":[],"evidence":[]}
+ manifest={"schema":"cyberiq.case.v1","case":name,"status":"open","created_utc":now(),"timeline":[],"evidence":[],"findings":[],"chain_of_custody":[]}
  save(p,manifest); return manifest
 def load(case_dir): return json.loads((Path(case_dir)/"case.json").read_text(encoding="utf-8"))
 def save(case_dir,data): (Path(case_dir)/"case.json").write_text(json.dumps(data,indent=2),encoding="utf-8")
@@ -19,4 +19,6 @@ def add_evidence(case_dir,source):
 def note(case_dir,text):
  data=load(case_dir); event={"time":now(),"type":"analyst_note","detail":text}; data["timeline"].append(event); save(case_dir,data); return event
 def set_status(case_dir,status):
+ from .schemas import ALLOWED_STATUS
+ if status not in ALLOWED_STATUS: raise ValueError("invalid case status")
  data=load(case_dir); data["status"]=status; data["timeline"].append({"time":now(),"type":"status","detail":status}); save(case_dir,data); return data
