@@ -5,6 +5,7 @@ from cyberiq_dfir.timeline import parse_lines
 from cyberiq_dfir.cases import new_case, add_evidence, note, set_status, load
 from cyberiq_dfir.reporting import markdown_report, html_report
 from cyberiq_dfir.plugins import names, run
+from cyberiq_dfir.integrity import verify_case
 
 class CoreTests(unittest.TestCase):
  def test_hash(self):
@@ -19,7 +20,7 @@ class CoreTests(unittest.TestCase):
    new_case("demo",d); case=Path(d)/"demo"; src=Path(d)/"e.log"; src.write_text("INFO demo")
    rec=add_evidence(case,src); self.assertEqual(len(rec["sha256"]),64)
    note(case,"reviewed"); set_status(case,"review")
-   data=load(case); self.assertEqual(data["status"],"review"); self.assertEqual(len(data["evidence"]),1)
+   data=load(case); self.assertEqual(data["status"],"review"); self.assertEqual(len(data["evidence"]),1); self.assertTrue(verify_case(case)["verified"])
    self.assertIn("# demo",markdown_report("demo",data)); self.assertIn("<!doctype html>",html_report("demo",data))
  def test_plugins(self):
   self.assertIn("indicators",names()); self.assertIn("1.2.3.4",run("indicators","1.2.3.4")["ipv4"])
