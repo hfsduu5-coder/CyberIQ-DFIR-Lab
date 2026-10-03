@@ -33,23 +33,27 @@ def main():
  q=s.add_parser("plugin-list")
  q=s.add_parser("plugin-run"); q.add_argument("name"); q.add_argument("file")
  a=p.parse_args()
- if a.cmd=="evidence": data=evidence_record(a.file)
- elif a.cmd=="analyze-log": data=summarize_log(Path(a.file).read_text(encoding="utf-8",errors="replace"))
- elif a.cmd=="timeline": data=parse_lines(Path(a.file).read_text(encoding="utf-8",errors="replace"),Path(a.file).name)
- elif a.cmd=="case-new": data=new_case(a.name)
- elif a.cmd=="case-add": data=add_evidence(a.case,a.file)
- elif a.cmd=="case-note": data=note(a.case,a.text)
- elif a.cmd=="case-status": data=set_status(a.case,a.status) if a.status else load(a.case)
- elif a.cmd=="case-export": export_case(load(a.case),a.output,a.format); data={"output":a.output,"format":a.format}
- elif a.cmd=="dashboard": build_dashboard(a.case,a.output); data={"output":a.output}
- elif a.cmd=="case-verify": data=verify_case(a.case)
- elif a.cmd=="case-validate": data=validate_case(load(a.case))
- elif a.cmd=="custody-add": data=custody_record(a.case,a.action,a.actor,a.detail)
- elif a.cmd=="custody-list": data={"chain_of_custody":custody_history(a.case)}
- elif a.cmd=="finding-add": data=finding_add(a.case,a.title,a.severity,a.evidence,a.observation)
- elif a.cmd=="finding-list": data={"findings":list_findings(a.case)}
- elif a.cmd=="plugin-list": data={"plugins":plugin_names()}
- else: data=plugin_run(a.name,Path(a.file).read_text(encoding="utf-8",errors="replace"))
- if getattr(a,"output",None) and a.cmd in ("evidence","analyze-log","timeline"): write_json(data,a.output)
- emit(data)
+ try:
+  if a.cmd=="evidence": data=evidence_record(a.file)
+  elif a.cmd=="analyze-log": data=summarize_log(Path(a.file).read_text(encoding="utf-8",errors="replace"))
+  elif a.cmd=="timeline": data=parse_lines(Path(a.file).read_text(encoding="utf-8",errors="replace"),Path(a.file).name)
+  elif a.cmd=="case-new": data=new_case(a.name)
+  elif a.cmd=="case-add": data=add_evidence(a.case,a.file)
+  elif a.cmd=="case-note": data=note(a.case,a.text)
+  elif a.cmd=="case-status": data=set_status(a.case,a.status) if a.status else load(a.case)
+  elif a.cmd=="case-export": export_case(load(a.case),a.output,a.format); data={"output":a.output,"format":a.format}
+  elif a.cmd=="dashboard": build_dashboard(a.case,a.output); data={"output":a.output}
+  elif a.cmd=="case-verify": data=verify_case(a.case)
+  elif a.cmd=="case-validate": data=validate_case(load(a.case))
+  elif a.cmd=="custody-add": data=custody_record(a.case,a.action,a.actor,a.detail)
+  elif a.cmd=="custody-list": data={"chain_of_custody":custody_history(a.case)}
+  elif a.cmd=="finding-add": data=finding_add(a.case,a.title,a.severity,a.evidence,a.observation)
+  elif a.cmd=="finding-list": data={"findings":list_findings(a.case)}
+  elif a.cmd=="plugin-list": data={"plugins":plugin_names()}
+  else: data=plugin_run(a.name,Path(a.file).read_text(encoding="utf-8",errors="replace"))
+  if getattr(a,"output",None) and a.cmd in ("evidence","analyze-log","timeline"): write_json(data,a.output)
+  emit(data)
+  return 0
+ except (OSError, ValueError, KeyError, json.JSONDecodeError) as exc:
+  p.exit(1,f"Error: {exc}\n")
 if __name__=="__main__": main()
