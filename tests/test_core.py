@@ -6,6 +6,9 @@ from cyberiq_dfir.cases import new_case, add_evidence, note, set_status, load
 from cyberiq_dfir.reporting import markdown_report, html_report
 from cyberiq_dfir.plugins import names, run
 from cyberiq_dfir.integrity import verify_case
+from cyberiq_dfir.validation import validate_case
+from cyberiq_dfir.chain import record as custody_record
+from cyberiq_dfir.findings import add as finding_add
 
 class CoreTests(unittest.TestCase):
  def test_hash(self):
@@ -21,6 +24,9 @@ class CoreTests(unittest.TestCase):
    rec=add_evidence(case,src); self.assertEqual(len(rec["sha256"]),64)
    note(case,"reviewed"); set_status(case,"review")
    data=load(case); self.assertEqual(data["status"],"review"); self.assertEqual(len(data["evidence"]),1); self.assertTrue(verify_case(case)["verified"])
+   self.assertTrue(validate_case(data)["valid"])
+   custody_record(case,"review","tester","synthetic evidence"); finding_add(case,"Synthetic finding","low","e.log","training observation")
+   data=load(case); self.assertEqual(len(data["chain_of_custody"]),1); self.assertEqual(data["findings"][0]["severity"],"low")
    self.assertIn("# demo",markdown_report("demo",data)); self.assertIn("<!doctype html>",html_report("demo",data))
  def test_plugins(self):
   self.assertIn("indicators",names()); self.assertIn("1.2.3.4",run("indicators","1.2.3.4")["ipv4"])
