@@ -3,7 +3,7 @@ from pathlib import Path
 from cyberiq_dfir.core import sha256_file, extract_indicators, summarize_log
 from cyberiq_dfir.timeline import parse_lines
 from cyberiq_dfir.cases import new_case, add_evidence, note, set_status, load
-from cyberiq_dfir.reporting import markdown_report, html_report
+from cyberiq_dfir.reporting import markdown_report, html_report, export_case
 from cyberiq_dfir.plugins import names, run
 from cyberiq_dfir.integrity import verify_case
 from cyberiq_dfir.validation import validate_case
@@ -27,7 +27,8 @@ class CoreTests(unittest.TestCase):
    self.assertTrue(validate_case(data)["valid"])
    custody_record(case,"review","tester","synthetic evidence"); finding_add(case,"Synthetic finding","low","e.log","training observation")
    data=load(case); self.assertEqual(len(data["chain_of_custody"]),1); self.assertEqual(data["findings"][0]["severity"],"low")
-   self.assertIn("# demo",markdown_report("demo",data)); self.assertIn("<!doctype html>",html_report("demo",data))
+   self.assertIn("# demo",markdown_report("demo",data)); rendered=html_report("demo",data); self.assertIn("<!doctype html>",rendered); self.assertIn("Findings",rendered); self.assertIn("Evidence",rendered)
+   out=export_case(data,case/"reports"/"case.html","html"); self.assertTrue(out.is_file())
  def test_case_name_safety(self):
   with tempfile.TemporaryDirectory() as d:
    with self.assertRaises(ValueError): new_case("../escape",d)
