@@ -28,6 +28,19 @@ class CoreTests(unittest.TestCase):
    custody_record(case,"review","tester","synthetic evidence"); finding_add(case,"Synthetic finding","low","e.log","training observation")
    data=load(case); self.assertEqual(len(data["chain_of_custody"]),1); self.assertEqual(data["findings"][0]["severity"],"low")
    self.assertIn("# demo",markdown_report("demo",data)); self.assertIn("<!doctype html>",html_report("demo",data))
+ def test_case_name_safety(self):
+  with tempfile.TemporaryDirectory() as d:
+   with self.assertRaises(ValueError): new_case("../escape",d)
+ def test_tamper_detection(self):
+  with tempfile.TemporaryDirectory() as d:
+   new_case("demo",d); case=Path(d)/"demo"; src=Path(d)/"e.log"; src.write_text("original")
+   rec=add_evidence(case,src); (case/rec["path"]).write_text("changed")
+   self.assertFalse(verify_case(case)["verified"])
+ def test_duplicate_evidence(self):
+  with tempfile.TemporaryDirectory() as d:
+   new_case("demo",d); case=Path(d)/"demo"; src=Path(d)/"e.log"; src.write_text("same")
+   add_evidence(case,src)
+   with self.assertRaises(ValueError): add_evidence(case,src)
  def test_plugins(self):
   self.assertIn("indicators",names()); self.assertIn("1.2.3.4",run("indicators","1.2.3.4")["ipv4"])
 if __name__=="__main__": unittest.main()
