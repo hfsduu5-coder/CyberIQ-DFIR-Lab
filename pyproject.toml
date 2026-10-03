@@ -1,0 +1,14 @@
+[build-system]
+requires=["setuptools>=68"]
+build-backend="setuptools.build_meta"
+
+[project]
+name="cyberiq-dfir-lab"
+version="0.1.0"
+description="Local-first DFIR workbench for authorized defensive analysis"
+requires-python=">=3.10"
+license={text="MIT"}
+authors=[{name="Muqtada Al-Sadr Jarallah Khalif"}]
+
+[project.scripts]
+cyberiq-dfir="cyberiq_dfir.cli:main"
