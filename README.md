@@ -122,3 +122,12 @@ This repository documents my personal development work on CyberIQ DFIR Lab. Exte
 ## License
 
 MIT
+
+## Data Schemas
+
+Machine-readable JSON Schema documents are included for the core case and finding records:
+
+- `schemas/case.schema.json`
+- `schemas/finding.schema.json`
+
+These schemas document the stable interchange shape without requiring evidence to leave the local workstation.
