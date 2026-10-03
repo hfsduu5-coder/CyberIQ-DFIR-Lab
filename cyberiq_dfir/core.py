@@ -1,5 +1,5 @@
 from __future__ import annotations
-import hashlib, json, re
+import hashlib, ipaddress, json, re
 from pathlib import Path
 from datetime import datetime, timezone
 
@@ -16,14 +16,14 @@ def evidence_record(path):
  return {"name":p.name,"path":str(p),"size":s.st_size,"sha256":sha256_file(p),"recorded_utc":datetime.now(timezone.utc).isoformat()}
 
 def extract_indicators(text):
- return {k:sorted(set(v.findall(text))) for k,v in PATTERNS.items()}
+ out={k:sorted(set(v.findall(text))) for k,v in PATTERNS.items()}\n out["ipv4"]=[x for x in out["ipv4"] if _valid_ipv4(x)]\n return out\n\ndef _valid_ipv4(value):\n try: ipaddress.ip_address(value); return True\n except ValueError: return False
 
 def summarize_log(text):
  lines=text.splitlines(); levels={x:0 for x in ("ERROR","WARN","INFO","DEBUG")}
  for line in lines:
   u=line.upper()
   for x in levels:
-   if x in u: levels[x]+=1
+   if re.search(rf"\\b{x}\\b",u): levels[x]+=1
  return {"lines":len(lines),"levels":levels,"indicators":extract_indicators(text)}
 
 def write_json(data,path): Path(path).write_text(json.dumps(data,indent=2),encoding="utf-8")
