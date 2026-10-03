@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.2.1
+- Hardened case-name validation and duplicate-case protection
+- Added evidence IDs and duplicate-content detection
+- Prevented same-name evidence overwrites
+- Added atomic case-manifest writes
+- Constrained integrity verification to the case workspace
+- Expanded manifest validation and safety regression tests
+
 ## 1.2.0
 - Hardened IPv4 validation and log-level matching
 - Richer Markdown investigation reports
