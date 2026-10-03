@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.2.0
+- Hardened IPv4 validation and log-level matching
+- Richer Markdown investigation reports
+- Automatic report output-directory creation
+- CLI/package version alignment
+- Continued case validation, custody, findings, integrity and defensive local-first boundaries
+
 ## 1.1.0
 - Case schema validation
 - Controlled case lifecycle states
