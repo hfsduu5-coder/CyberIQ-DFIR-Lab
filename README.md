@@ -3,26 +3,27 @@
 > **Personal cybersecurity project by Muqtada Al-Sadr Jarallah Khalif (Al-Hantooshi)**  
 > Developer • Team Leader of CyberIQ
 
-![Version](https://img.shields.io/badge/version-1.1.0-B00020) ![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white) ![Scope](https://img.shields.io/badge/DFIR-local--first-800020)
+![Version](https://img.shields.io/badge/version-1.2.0-B00020) ![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white) ![Scope](https://img.shields.io/badge/DFIR-local--first-800020)
 
 A Python **Digital Forensics & Incident Response workbench** for authorized investigations, CTF/DFIR practice, education, and defensive security engineering.
 
 > [!IMPORTANT]
 > CyberIQ DFIR Lab works on supplied local evidence. It intentionally excludes network scanning, exploitation, credential attacks, persistence, and malware behavior.
 
-## What v1.1 does
+## What v1.2 does
 
 **Evidence → SHA-256 manifest → offline analysis → normalized case timeline → analyst notes/status → JSON/Markdown/HTML report → local dashboard**
 
 - Case workspaces with evidence, reports and notes directories
 - Evidence copy + SHA-256 integrity record + size/provenance metadata
-- Offline log-level summaries and IPv4/domain/SHA-256 pattern inventory
+- Offline log-level summaries with stricter level matching and validated IPv4 inventory
+- IPv4/domain/SHA-256 pattern inventory from supplied evidence
 - ISO timestamp timeline extraction from supplied logs
 - Case event timeline, analyst notes and controlled lifecycle status
 - Case schema validation and evidence integrity re-verification
 - Chain-of-custody activity records
 - Structured analyst findings with severity and evidence references
-- JSON, Markdown and standalone HTML exports
+- JSON, Markdown and standalone HTML exports; Markdown reports include findings, evidence hashes, custody records and timeline
 - Read-only local HTML dashboard
 - Small safe offline plugin registry
 - Synthetic example evidence
