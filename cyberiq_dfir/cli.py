@@ -14,7 +14,7 @@ from .findings import add as finding_add, list_findings
 def emit(data): print(json.dumps(data,indent=2))
 def main():
  p=argparse.ArgumentParser(prog="cyberiq-dfir",description="CyberIQ local-first DFIR workbench")
- p.add_argument("--version",action="version",version="1.0.0"); s=p.add_subparsers(dest="cmd",required=True)
+ p.add_argument("--version",action="version",version="1.2.0"); s=p.add_subparsers(dest="cmd",required=True)
  q=s.add_parser("evidence"); q.add_argument("file"); q.add_argument("--output")
  q=s.add_parser("analyze-log"); q.add_argument("file"); q.add_argument("--output")
  q=s.add_parser("timeline"); q.add_argument("file"); q.add_argument("--output")
