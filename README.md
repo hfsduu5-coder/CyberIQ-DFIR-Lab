@@ -3,81 +3,105 @@
 > **Personal cybersecurity project by Muqtada Al-Sadr Jarallah Khalif (Al-Hantooshi)**  
 > Developer • Team Leader of CyberIQ
 
-![Version](https://img.shields.io/badge/version-0.1.0-B00020) ![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white) ![Scope](https://img.shields.io/badge/scope-local--first%20DFIR-800020)
+![Version](https://img.shields.io/badge/version-1.0.0-B00020) ![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white) ![Scope](https://img.shields.io/badge/DFIR-local--first-800020)
 
-A local-first **Digital Forensics & Incident Response workbench** for authorized investigations, CTF/DFIR practice, education, and defensive security engineering.
+A Python **Digital Forensics & Incident Response workbench** for authorized investigations, CTF/DFIR practice, education, and defensive security engineering.
 
 > [!IMPORTANT]
-> The v0.1 core analyzes supplied local evidence. It performs no network scanning, exploitation, credential attacks, persistence, or malware behavior.
+> CyberIQ DFIR Lab works on supplied local evidence. It intentionally excludes network scanning, exploitation, credential attacks, persistence, and malware behavior.
 
-## Investigation pipeline
+## What v1.0 does
 
-```text
-Supplied evidence
-      │
-      ├── SHA-256 + size + provenance record
-      ▼
-Offline parsing
-      │
-      ├── log-level summary
-      ├── IPv4 / domain / SHA-256 pattern inventory
-      ▼
-Structured JSON
-      │
-      └── case workspace / reports
-```
+**Evidence → SHA-256 manifest → offline analysis → normalized case timeline → analyst notes/status → JSON/Markdown/HTML report → local dashboard**
 
-## v0.1 implemented
-
-- Python package and `cyberiq-dfir` CLI
-- SHA-256 evidence hashing
-- Evidence metadata records
-- Offline log summarization
-- Local indicator-pattern extraction
-- Case workspace creation
-- JSON output
+- Case workspaces with evidence, reports and notes directories
+- Evidence copy + SHA-256 integrity record + size/provenance metadata
+- Offline log-level summaries and IPv4/domain/SHA-256 pattern inventory
+- ISO timestamp timeline extraction from supplied logs
+- Case event timeline, analyst notes and lifecycle status
+- JSON, Markdown and standalone HTML exports
+- Read-only local HTML dashboard
+- Small safe offline plugin registry
 - Synthetic example evidence
-- Unit tests
-- GitHub Actions test matrix for Python 3.10–3.13
-- Architecture and security documentation
+- Unit/regression tests and GitHub Actions matrix for Python 3.10–3.13
+- Architecture, analyst, security and contribution documentation
 
-## Quick start
+## Install
 
 ```bash
 git clone https://github.com/hfsduu5-coder/CyberIQ-DFIR-Lab.git
 cd CyberIQ-DFIR-Lab
+python -m venv .venv
 pip install -e .
 cyberiq-dfir --version
-cyberiq-dfir evidence examples/sample.log
-cyberiq-dfir analyze-log examples/sample.log
-cyberiq-dfir case-new demo-case
 ```
 
-Run tests:
+## Investigation workflow
+
+```bash
+cyberiq-dfir case-new incident-001
+cyberiq-dfir case-add cases/incident-001 examples/sample.log
+cyberiq-dfir analyze-log examples/sample.log --output analysis.json
+cyberiq-dfir timeline examples/sample.log --output timeline.json
+cyberiq-dfir case-note cases/incident-001 "Initial evidence review complete"
+cyberiq-dfir case-status cases/incident-001 review
+cyberiq-dfir case-export cases/incident-001 report.html --format html
+cyberiq-dfir dashboard cases/incident-001 --output dashboard.html
+```
+
+## Offline plugins
+
+```bash
+cyberiq-dfir plugin-list
+cyberiq-dfir plugin-run indicators examples/sample.log
+cyberiq-dfir plugin-run log-summary examples/sample.log
+```
+
+## Architecture
+
+```text
+                  CYBERIQ DFIR LAB
+                         │
+                 Case Workspace
+                         │
+          ┌──────────────┼──────────────┐
+          ▼              ▼              ▼
+      Evidence       Analyst Notes     Status
+          │
+    SHA-256 + metadata
+          │
+          ▼
+     Offline Parsers
+   Logs • IOCs • Timeline
+          │
+          ▼
+      Case Timeline
+          │
+     ┌────┴────┐
+     ▼         ▼
+   Reports   Dashboard
+ JSON/MD/HTML  HTML
+```
+
+## Tests
 
 ```bash
 python -m unittest discover -s tests -v
 ```
 
-## Structure
+The repository defines CI across Python 3.10–3.13. The README does not claim a current remote CI result.
 
-```text
-cyberiq_dfir/
-  core.py          evidence + offline analysis core
-  cli.py           command-line interface
-tests/             regression tests
-examples/          synthetic safe evidence
-docs/              architecture documentation
-.github/workflows/ CI definition
-```
+## Documentation
+
+- `docs/ARCHITECTURE.md` — evidence pipeline and design boundaries
+- `docs/ANALYST-GUIDE.md` — practical investigation workflow
+- `SECURITY.md` — project security policy
+- `CONTRIBUTING.md` — contribution rules
+- `CHANGELOG.md` — version history
 
 ## Evidence principles
 
 **Authorization first • Preserve originals • Hash evidence • Record provenance • Offline by default • Separate observations from conclusions**
-
-## Roadmap
-
-Next milestones: normalized event schema, timeline engine, case manifest lifecycle, Markdown/HTML reports, read-only dashboard, safe parser plugins, richer synthetic datasets, and expanded tests.
 
 ## Portfolio & attribution
 
