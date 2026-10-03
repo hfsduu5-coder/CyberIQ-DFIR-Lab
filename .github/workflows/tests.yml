@@ -16,3 +16,5 @@ jobs:
       python-version: ${{ matrix.python-version }}
    - run: pip install -e .
    - run: python -m unittest discover -s tests -v
+
+# CI_EVIDENCE: 1970-01-01 manual-verification trigger marker
