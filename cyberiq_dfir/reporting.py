@@ -8,10 +8,18 @@ def markdown_report(title,data):
  for e in data.get("timeline",[]): body.append(f"- **{e.get('time','')}** — {e.get('type','event')}: {e.get('detail','')}")
  return "\n".join(body)+"\n"
 def html_report(title,data):
- rows="".join(f"<tr><td>{html.escape(str(e.get('time','')))}</td><td>{html.escape(str(e.get('type','')))}</td><td>{html.escape(str(e.get('detail','')))}</td></tr>" for e in data.get("timeline",[]))
- return f"""<!doctype html><meta charset="utf-8"><title>{html.escape(title)}</title><style>body{{font-family:system-ui;background:#090909;color:#eee;max-width:1000px;margin:40px auto;padding:20px}}h1{{color:#e53935}}table{{width:100%;border-collapse:collapse}}td,th{{padding:10px;border-bottom:1px solid #333;text-align:left}}code{{color:#ff6b6b}}</style><h1>{html.escape(title)}</h1><p>Local CyberIQ DFIR report. Evidence items: <b>{len(data.get('evidence',[]))}</b>. Status: <b>{html.escape(str(data.get('status','n/a')))}</b>.</p><table><tr><th>Time</th><th>Type</th><th>Detail</th></tr>{rows}</table>"""
+ def esc(v): return html.escape(str(v))
+ def rows(items,fields):
+  return ''.join('<tr>'+''.join('<td>'+esc(item.get(field,''))+'</td>' for field in fields)+'</tr>' for item in items)
+ findings=rows(data.get('findings',[]),('id','severity','title','evidence','observation'))
+ evidence=rows(data.get('evidence',[]),('id','name','sha256','size'))
+ custody=rows(data.get('chain_of_custody',[]),('time','actor','action','detail'))
+ timeline=rows(data.get('timeline',[]),('time','type','detail'))
+ return "<!doctype html><html lang='en'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>"+esc(title)+"</title></head><body><h1>"+esc(title)+"</h1><p>Local CyberIQ DFIR report. Status: <b>"+esc(data.get('status','n/a'))+"</b></p><h2>Findings</h2><table>"+findings+"</table><h2>Evidence</h2><table>"+evidence+"</table><h2>Chain of Custody</h2><table>"+custody+"</table><h2>Timeline</h2><table>"+timeline+"</table></body></html>"
 def export_case(data,path,fmt):
- p=Path(path); p.parent.mkdir(parents=True,exist_ok=True)
+ p=Path(path)
+ if p.exists() and p.is_dir(): raise ValueError('output must be a file path')
+ p.parent.mkdir(parents=True,exist_ok=True)
  if fmt=="json": p.write_text(json.dumps(data,indent=2),encoding="utf-8")
  elif fmt=="md": p.write_text(markdown_report(data.get("case","DFIR Case"),data),encoding="utf-8")
  elif fmt=="html": p.write_text(html_report(data.get("case","DFIR Case"),data),encoding="utf-8")
