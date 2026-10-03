@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.2.1
+## 1.3.0
 - Hardened case-name validation and duplicate-case protection
 - Added evidence IDs and duplicate-content detection
 - Prevented same-name evidence overwrites
